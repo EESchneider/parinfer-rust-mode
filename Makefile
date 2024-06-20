@@ -8,7 +8,7 @@ ELS_ALL = $(wildcard *.el)
 ELS = $(filter-out $(FILTER_FILES),$(ELS_ALL))
 OBJECTS = $(ELS:.el=.elc)
 RAW_OS = $(shell uname | tr '[:upper:]' '[:lower:]')
-OS = $(RAW_OS:mingw_nt%=windows)
+OS = $(RAW_OS:mingw%=windows)
 .PHONY: elpa build version download test lint clean elpaclean run-$(PKG)
 
 all: build
