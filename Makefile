@@ -29,7 +29,6 @@ version:
 	$(EMACS) --version
 
 ~/.emacs.d/parinfer-rust/parinfer-rust-%.so ~/.emacs.d/parinfer-rust/parinfer-rust-%.dll:
-	echo "downloading libraries for $*"
 	mkdir -p "$(HOME)/.emacs.d/parinfer-rust"
 	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*$(suffix $@)" -o "$@"
 
