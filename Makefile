@@ -8,7 +8,7 @@ ELS_ALL = $(wildcard *.el)
 ELS = $(filter-out $(FILTER_FILES),$(ELS_ALL))
 OBJECTS = $(ELS:.el=.elc)
 OS = $(shell uname | tr '[:upper:]' '[:lower:]')
-.PHONY: elpa build version test lint clean elpaclean run-$(PKG)
+.PHONY: elpa build version download test lint clean elpaclean run-$(PKG)
 
 all: build
 
@@ -27,11 +27,11 @@ build: version elpa
 version:
 	$(EMACS) --version
 
-download:
-ifeq (,$(wildcard $(HOME)/.emacs.d/parinfer-rust/parinfer-rust-$(OS).so))
-	mkdir -p $(HOME)/.emacs.d/parinfer-rust
-	curl -L "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$(OS).so" -o "$(HOME)/.emacs.d/parinfer-rust/parinfer-rust-$(OS).so"
-endif
+~/.emacs.d/parinfer-rust/parinfer-rust-%.so:
+	mkdir -p "$(HOME)/.emacs.d/parinfer-rust"
+	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*.so" -o "$@"
+
+download: ~/.emacs.d/parinfer-rust/parinfer-rust-$(OS).so
 
 test: clean elpa version download build
 	$(CASK) exec ert-runner test/**.el --quiet
