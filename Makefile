@@ -27,12 +27,16 @@ build: version elpa
 version:
 	$(EMACS) --version
 
-~/.emacs.d/parinfer-rust/parinfer-rust-%.so:
+~/.emacs.d/parinfer-rust/parinfer-rust-%.so ~/.emacs.d/parinfer-rust/parinfer-rust-%.dll:
 	echo "downloading libraries for $*"
 	mkdir -p "$(HOME)/.emacs.d/parinfer-rust"
-	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*.so" -o "$@"
+	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*$(suffix $@)" -o "$@"
 
+ifeq (windows, $(OS))
+download: ~/.emacs.d/parinfer-rust/parinfer-rust-$(OS).dll
+else
 download: ~/.emacs.d/parinfer-rust/parinfer-rust-$(OS).so
+endif
 
 test: clean elpa version download build
 	$(CASK) exec ert-runner test/**.el --quiet
