@@ -9,7 +9,7 @@ ELS = $(filter-out $(FILTER_FILES),$(ELS_ALL))
 OBJECTS = $(ELS:.el=.elc)
 RAW_OS = $(shell uname | tr '[:upper:]' '[:lower:]')
 OS = $(RAW_OS:mingw%=windows)
-.PHONY: elpa build version download test lint clean elpaclean run-$(PKG)
+.PHONY: elpa build version download test lint clean elpaclean run-$(PKG) .FORCE
 
 all: build
 
@@ -28,9 +28,13 @@ build: version elpa
 version:
 	$(EMACS) --version
 
-~/.emacs.d/parinfer-rust/parinfer-rust-%.so ~/.emacs.d/parinfer-rust/parinfer-rust-%.dll:
+~/.emacs.d/parinfer-rust/parinfer-rust-%.so: .FORCE
 	mkdir -p "$(HOME)/.emacs.d/parinfer-rust"
-	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*$(suffix $@)" -o "$@"
+	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*.so" -o "$@"
+
+~/.emacs.d/parinfer-rust/parinfer-rust-%.dll: .FORCE
+	mkdir -p "$(HOME)/.emacs.d/parinfer-rust"
+	curl -fL "https://github.com/justinbarclay/parinfer-rust-emacs/releases/download/v0.4.6/parinfer-rust-$*.dll" -o "$@"
 
 ifeq (windows, $(OS))
 download: ~/.emacs.d/parinfer-rust/parinfer-rust-$(OS).dll
