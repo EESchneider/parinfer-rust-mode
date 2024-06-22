@@ -116,7 +116,7 @@ Uses PARINFER-RUST-VERSION to download a compatible version of the library."
         (unless (file-directory-p (file-name-directory library-location))
           (make-directory (file-name-directory library-location) t))
         (shell-command
-         (format "curl -L %s -o %s"
+         (format "curl -L \"%s\" -o \"%s\""
                  (format parinfer-rust--download-url
                          parinfer-rust-version
                          lib-name)
